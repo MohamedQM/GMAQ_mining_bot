@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة التعدين التلقائي</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Header Section -->
+        <div class="header-section">
+            <div class="row align-items-center">
+                <div class="col-12">
+                    <div class="user-info-card">
+                        <h2 class="text-center mb-3">
+                            <i class="fas fa-coins text-warning"></i>
+                            منصة التعدين التلقائي
+                        </h2>
+
+                        <!-- User IP and Location -->
+                        <div class="ip-info">
+                            <div class="row">
+                                <div class="col-md-6">
+                            <div class="info-item">
+                                <i class="fas fa-network-wired text-primary"></i>
+                                <strong>عنوان IP:</strong> {{ user_ip }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-item">
+                                <i class="fas fa-fingerprint text-warning"></i>
+                                <strong>معرف الجلسة:</strong> 
+                                <span class="badge bg-secondary">{{ session.user_id[:8] if session.user_id else 'غير محدد' }}...</span>
+                            </div>
+                        </div>
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <i class="fas fa-map-marker-alt text-success"></i>
+                                        <strong>البلد:</strong> 
+                                        <img src="https://flagcdn.com/24x18/{{ user_location.flag }}.png" alt="Flag" class="flag-icon">
+                                        {{ user_location.country }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- User Agent Detection -->
+                        <div class="user-agent-section" id="userAgentSection">
+                            <div class="alert alert-info">
+                                <strong>جهازك:</strong> <span id="deviceInfo"></span>
+                                <button class="btn btn-sm btn-outline-primary me-2" onclick="toggleUserAgent()">
+                                    <span id="uaToggleText">عرض التفاصيل</span>
+                                </button>
+                            </div>
+                            <div id="userAgentDetails" style="display: none;">
+                                <small class="text-muted">{{ user_agent }}</small>
+                                <div class="mt-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="useCustomUA">
+                                        <label class="form-check-label" for="useCustomUA">
+                                            استخدام User-Agent المخصص الخاص بك في الطلبات
+                                        </label>
+                                    </div>
+                                    <small class="text-muted">
+                                        تفعيل هذا الخيار سيستخدم معلومات جهازك الحقيقية في طلبات التعدين
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mining Status Section -->
+        <div class="operation-status-section mb-4">
+            <h3 class="text-center mb-4">
+                <i class="fas fa-chart-line"></i>
+                حالة العمليات المستمرة
+            </h3>
+            <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle"></i>
+                النظام يعمل بشكل مستمر - يبحث عن مهام جديدة كل دقيقة
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-list"></i>
+                                سجل العمليات المباشر
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="operationLogs" class="operation-logs">
+                                <p class="text-muted">جاري تحميل سجل العمليات...</p>
+                            </div>
+                            <div class="text-center mt-3">
+                                <button class="btn btn-outline-danger btn-sm" onclick="clearOperationLogs()">
+                                    <i class="fas fa-trash"></i>
+                                    مسح السجل
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mining Buttons Section -->
+        <div class="mining-section">
+            <h3 class="text-center mb-4">
+                <i class="fas fa-pickaxe"></i>
+                أنواع التعدين المتاحة
+            </h3>
+
+            <div class="row g-3">
+                <!-- COIN Mining -->
+                <div class="col-md-6">
+                    <div class="mining-card">
+                        <div class="mining-header">
+                            <span class="mining-emoji">🪙</span>
+                            <h5>COIN</h5>
+                            <span class="status-badge" id="coinStatus">متوقف</span>
+                        </div>
+                        <p class="mining-description">{{ custom_links.coin.description }}</p>
+                        <div class="mining-controls">
+                            <input type="url" class="form-control mb-2" id="coinUrl" 
+                                   placeholder="ضع رابط التعدين هنا...">
+                            <div class="btn-group w-100">
+                                <button class="btn btn-success" onclick="startMining('COIN')">
+                                    <i class="fas fa-play"></i> بدء التعدين
+                                </button>
+                                <button class="btn btn-danger" onclick="stopMining('COIN')">
+                                    <i class="fas fa-stop"></i> إيقاف
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mining-stats">
+                            <small>المهام المكتملة: <span id="coinTasks">{{ user_stats.mining_types.COIN or 0 }}</span></small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BANAN Mining -->
+                <div class="col-md-6">
+                    <div class="mining-card">
+                        <div class="mining-header">
+                            <span class="mining-emoji">🍌</span>
+                            <h5>BANAN</h5>
+                            <span class="status-badge" id="bananStatus">متوقف</span>
+                        </div>
+                        <p class="mining-description">{{ custom_links.banan.description }}</p>
+                        <div class="mining-controls">
+                            <input type="url" class="form-control mb-2" id="bananUrl" 
+                                   placeholder="ضع رابط التعدين هنا...">
+                            <div class="btn-group w-100">
+                                <button class="btn btn-success" onclick="startMining('BANAN')">
+                                    <i class="fas fa-play"></i> بدء التعدين
+                                </button>
+                                <button class="btn btn-danger" onclick="stopMining('BANAN')">
+                                    <i class="fas fa-stop"></i> إيقاف
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mining-stats">
+                            <small>المهام المكتملة: <span id="bananTasks">{{ user_stats.mining_types.BANAN or 0 }}</span></small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TRX Mining -->
+                <div class="col-md-6">
+                    <div class="mining-card">
+                        <div class="mining-header">
+                            <span class="mining-emoji">💎</span>
+                            <h5>TRX</h5>
+                            <span class="status-badge" id="trxStatus">متوقف</span>
+                        </div>
+                        <p class="mining-description">{{ custom_links.trx.description }}</p>
+                        <div class="mining-controls">
+                            <input type="url" class="form-control mb-2" id="trxUrl" 
+                                   placeholder="ضع رابط التعدين هنا...">
+                            <div class="btn-group w-100">
+                                <button class="btn btn-success" onclick="startMining('TRX')">
+                                    <i class="fas fa-play"></i> بدء التعدين
+                                </button>
+                                <button class="btn btn-danger" onclick="stopMining('TRX')">
+                                    <i class="fas fa-stop"></i> إيقاف
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mining-stats">
+                            <small>المهام المكتملة: <span id="trxTasks">{{ user_stats.mining_types.TRX or 0 }}</span></small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SHIB Mining -->
+                <div class="col-md-6">
+                    <div class="mining-card">
+                        <div class="mining-header">
+                            <span class="mining-emoji">🐕</span>
+                            <h5>SHIB</h5>
+                            <span class="status-badge" id="shibStatus">متوقف</span>
+                        </div>
+                        <p class="mining-description">{{ custom_links.shib.description }}</p>
+                        <div class="mining-controls">
+                            <input type="url" class="form-control mb-2" id="shibUrl" 
+                                   placeholder="ضع رابط التعدين هنا...">
+                            <div class="btn-group w-100">
+                                <button class="btn btn-success" onclick="startMining('SHIB')">
+                                    <i class="fas fa-play"></i> بدء التعدين
+                                </button>
+                                <button class="btn btn-danger" onclick="stopMining('SHIB')">
+                                    <i class="fas fa-stop"></i> إيقاف
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mining-stats">
+                            <small>المهام المكتملة: <span id="shibTasks">{{ user_stats.mining_types.SHIB or 0 }}</span></small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BEAMX Mining -->
+                <div class="col-md-6">
+                    <div class="mining-card">
+                        <div class="mining-header">
+                            <span class="mining-emoji">⚡</span>
+                            <h5>BEAMX</h5>
+                            <span class="status-badge" id="beamxStatus">متوقف</span>
+                        </div>
+                        <p class="mining-description">{{ custom_links.beamx.description }}</p>
+                        <div class="mining-controls">
+                            <input type="url" class="form-control mb-2" id="beamxUrl" 
+                                   placeholder="ضع رابط التعدين هنا...">
+                            <div class="btn-group w-100">
+                                <button class="btn btn-success" onclick="startMining('BEAMX')">
+                                    <i class="fas fa-play"></i> بدء التعدين
+                                </button>
+                                <button class="btn btn-danger" onclick="stopMining('BEAMX')">
+                                    <i class="fas fa-stop"></i> إيقاف
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mining-stats">
+                            <small>المهام المكتملة: <span id="beamxTasks">{{ user_stats.mining_types.BEAMX or 0 }}</span></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions mt-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <button class="btn btn-danger btn-lg w-100" onclick="stopAllMining()">
+                            <i class="fas fa-stop-circle"></i>
+                            إيقاف جميع أنواع التعدين
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="{{ url_for('donations') }}" class="btn btn-warning btn-lg w-100">
+                            <i class="fas fa-heart"></i>
+                            صفحة التبرعات
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="stats-section">
+            <h3 class="text-center mb-4">
+                <i class="fas fa-chart-bar"></i>
+                إحصائياتك
+            </h3>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-number">{{ user_stats.total_tasks }}</div>
+                        <div class="stat-label">إجمالي المهام</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-number" id="activeMining">0</div>
+                        <div class="stat-label">التعدين النشط</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-number">{{ user_stats.start_date[:10] if user_stats.start_date else 'اليوم' }}</div>
+                        <div class="stat-label">تاريخ البداية</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- URL History Section -->
+        <div class="url-history-section">
+            <h3 class="text-center mb-4">
+                <i class="fas fa-history"></i>
+                سجل الروابط المحفوظة
+            </h3>
+
+            <div class="history-controls text-center mb-3">
+                <button class="btn btn-info" onclick="loadUrlHistory()">
+                    <i class="fas fa-reload"></i>
+                    تحديث السجل
+                </button>
+                <button class="btn btn-warning" onclick="clearUrlHistory()">
+                    <i class="fas fa-trash"></i>
+                    مسح السجل
+                </button>
+            </div>
+
+            <div id="urlHistoryContainer" style="display: none;">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>نوع التعدين</th>
+                                <th>التاريخ</th>
+                                <th>الحالة</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="urlHistoryTable">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Operation Logs Section -->
+        <div class="operation-logs-section">
+            <h3 class="text-center mb-4">
+                <i class="fas fa-cogs"></i>
+                سجل العمليات التفصيلي
+            </h3>
+
+            <div class="logs-controls text-center mb-3">
+                <button class="btn btn-success" onclick="loadOperationLogs()">
+                    <i class="fas fa-sync"></i>
+                    تحديث السجل
+                </button>
+                <button class="btn btn-danger" onclick="clearOperationLogs()">
+                    <i class="fas fa-trash-alt"></i>
+                    مسح السجل
+                </button>
+                <button class="btn btn-info" onclick="toggleAutoRefresh()">
+                    <i class="fas fa-play" id="autoRefreshIcon"></i>
+                    <span id="autoRefreshText">تفعيل التحديث التلقائي</span>
+                </button>
+            </div>
+
+            <div id="operationLogsContainer">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>الوقت</th>
+                                <th>نوع التعدين</th>
+                                <th>الخطوة</th>
+                                <th>الحالة</th>
+                                <th>التفاصيل</th>
+                            </tr>
+                        </thead>
+                        <tbody id="operationLogsTable">
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">
+                                    <i class="fas fa-info-circle"></i>
+                                    لا توجد عمليات مسجلة بعد
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Panel -->
+        {% if is_admin %}
+        <div class="admin-section">
+            <h3 class="text-center mb-4">
+                <i class="fas fa-user-shield text-danger"></i>
+                لوحة الأدمن
+            </h3>
+
+            <div class="admin-controls">
+                <button class="btn btn-info mb-3" onclick="loadUsers()">
+                    <i class="fas fa-users"></i>
+                    عرض جميع المستخدمين
+                </button>
+
+                <div id="usersContainer" style="display: none;">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>معرف المستخدم</th>
+                                    <th>إجمالي المهام</th>
+                                    <th>التعدين النشط</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTable">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- حالة الإعلانات اليومية -->
+        <div class="section-card mt-4">
+            <h3 class="section-title">
+                <i class="fas fa-chart-bar"></i>
+                حالة الإعلانات اليومية
+            </h3>
+            <div class="daily-ads-container">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <button class="btn btn-primary btn-sm" onclick="refreshDailyAdsStatus()">
+                        <i class="fas fa-sync-alt"></i> تحديث الحالة
+                    </button>
+                    <small class="text-muted">آخر تحديث: <span id="lastUpdateTime">غير محدد</span></small>
+                </div>
+                <div id="dailyAdsStatus" class="row">
+                    <div class="text-center text-muted">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        جاري تحميل البيانات...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- معلومات العمليات -->
+        <div class="section-card mt-4">
+            <h3 class="section-title">
+                <i class="fas fa-info-circle"></i>
+                سجل العمليات
+            </h3>
+            <div class="operation-logs-container">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <button class="btn btn-primary btn-sm" onclick="refreshOperationLogs()">
+                        <i class="fas fa-sync-alt"></i> تحديث
+                    </button>
+                    <button class="btn btn-danger btn-sm" onclick="clearOperationLogs()">
+                        <i class="fas fa-trash"></i> مسح السجل
+                    </button>
+                </div>
+                <div id="operationLogs" class="operation-logs">
+                    <div class="text-center text-muted">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        جاري تحميل السجل...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="notificationToast" class="toast" role="alert">
+            <div class="toast-header">
+                <strong class="me-auto">إشعار</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>v>
+            <div class="toast-body" id="toastMessage">
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    <script>
+        // تحديد معلومات الجهاز
+        document.addEventListener('DOMContentLoaded', function() {
+            detectDevice();
+            updateMiningStatus();
+
+            // تحديث الحالة كل 30 ثانية
+            setInterval(updateMiningStatus, 30000);
+        });
+    </script>
+</body>
+</html>
