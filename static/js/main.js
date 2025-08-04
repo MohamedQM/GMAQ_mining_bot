@@ -38,22 +38,31 @@ function toggleUserAgent() {
 // Start mining function
 async function startMining(miningType) {
     const urlInput = document.getElementById(`${miningType.toLowerCase()}Url`);
-    const url = urlInput.value.trim();
+    const urls = urlInput.value.trim().split('\n').filter(url => url.trim() !== '');
     const useCustomUA = document.getElementById('useCustomUA').checked;
 
-    if (!url) {
+    if (urls.length === 0) {
         showNotification('يرجى إدخال رابط التعدين أولاً', 'error');
         return;
     }
 
-    if (!url.includes('tgWebAppData=')) {
-        showNotification('رابط غير صحيح. يجب أن يحتوي على tgWebAppData', 'error');
-        return;
+    // التحقق من أن جميع الروابط صحيحة
+    for (let url of urls) {
+        if (!url.includes('tgWebAppData=')) {
+            showNotification(`رابط غير صحيح: ${url.substring(0, 50)}...\nيجب أن يحتوي على tgWebAppData`, 'error');
+            return;
+        }
     }
+
+    // عرض معلومات الروابط
+    const infoElement = document.getElementById(`${miningType.toLowerCase()}Info`);
+    infoElement.innerHTML = `<i class="fas fa-info-circle"></i> سيتم تشغيل ${urls.length} رابط للتعدين...`;
+    infoElement.className = 'text-info';
 
     try {
         showLoading(miningType, 'start');
 
+        // إرسال أول رابط للبدء ثم إضافة الباقي
         const response = await fetch('/api/start_mining', {
             method: 'POST',
             headers: {
@@ -61,8 +70,9 @@ async function startMining(miningType) {
             },
             body: JSON.stringify({
                 mining_type: miningType,
-                init_data: url,
-                use_custom_ua: useCustomUA
+                init_data: urls[0], // أول رابط
+                use_custom_ua: useCustomUA,
+                additional_urls: urls.slice(1) // باقي الروابط
             })
         });
 
@@ -478,8 +488,13 @@ function displayUrlHistory(history) {
 function reuseUrl(miningType, url) {
     const urlInput = document.getElementById(`${miningType.toLowerCase()}Url`);
     if (urlInput) {
-        urlInput.value = url;
-        showNotification(`تم تحميل الرابط لـ ${miningType}`, 'success');
+        // التأكد من أن الرابط يحتوي على tgWebAppData
+        if (url && (url.includes('tgWebAppData=') || url.includes('query_id=') || url.includes('user='))) {
+            urlInput.value = url;
+            showNotification(`تم تحميل الرابط الكامل لـ ${miningType}`, 'success');
+        } else {
+            showNotification(`رابط غير صحيح أو غير مكتمل`, 'error');
+        }
     }
 }
 

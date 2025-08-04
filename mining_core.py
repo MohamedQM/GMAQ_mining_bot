@@ -76,7 +76,7 @@ class MiningCore:
                                 'created_at': '',
                                 'last_activity': ''
                             }
-                            
+
                             for field, default_value in required_fields.items():
                                 if field not in self.user_sessions[user_id]:
                                     self.user_sessions[user_id][field] = default_value
@@ -311,9 +311,10 @@ class MiningCore:
         except Exception:
             return resp.text
 
-    # BEAMX script functions
-    def beamx_get_hourly_tasks(self, session, init_data):
-        url = f"https://botsmother.com/api/command/MTAwMC84MTIz?initData={init_data}"  # Replace with actual URL
+    # BEAMX script functions - Updated with correct URLs
+    def beamx_get_page_info(self, session, init_data):
+        """جلب معلومات الصفحة الرئيسية للـ BEAMX"""
+        url = f"https://botsmother.com/api/command/MTAyOQ==/ODQ1Mg==?initData={init_data}"
         headers = {
             "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1",
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
@@ -321,13 +322,83 @@ class MiningCore:
             "Referer": url
         }
         resp = session.get(url, headers=headers)
-        match = re.search(r'id="hourly-tasks">(\d+)<', resp.text)
-        if match:
-            return int(match.group(1)), url
-        return None, url
+
+        page_info = {
+            'balance': None,
+            'daily_tasks_completed': None,
+            'daily_tasks_total': None,
+            'hourly_tasks_completed': None,
+            'hourly_tasks_total': None,
+            'daily_progress': 0,
+            'hourly_progress': 0,
+            'can_mine': False
+        }
+
+        try:
+            # استخراج الرصيد - من الـ JavaScript variables أولاً
+            balance_patterns = [
+                r'balance["\']?\s*:\s*([0-9.]+)',  # JavaScript variable
+                r'user-balance["\']?>([0-9.]+)<',  # HTML element
+                r'Balance[:\s]*([0-9.]+)',  # Plain text
+                r'id="balance"[^>]*>([^<]+)'  # HTML id
+            ]
+            for pattern in balance_patterns:
+                balance_match = re.search(pattern, resp.text, re.IGNORECASE)
+                if balance_match:
+                    page_info['balance'] = balance_match.group(1).strip()
+                    break
+
+            # استخراج إعلانات الساعة - من الـ JavaScript variables أولاً
+            hourly_patterns = [
+                r'hourlyTasks["\']?\s*:\s*(\d+)',  # JavaScript variable
+                r'hourly-tasks["\']?>(\d+)<',  # HTML element
+                r'id="hourly-tasks">(\d+)<',  # HTML id
+                r'Hourly.*?(\d+)/(\d+)',  # Text pattern
+            ]
+            for pattern in hourly_patterns:
+                hourly_match = re.search(pattern, resp.text, re.IGNORECASE)
+                if hourly_match:
+                    page_info['hourly_tasks_completed'] = int(hourly_match.group(1))
+                    page_info['hourly_tasks_total'] = 15  # الافتراضي الصحيح للـ BEAMX
+                    page_info['hourly_progress'] = (page_info['hourly_tasks_completed'] / 15) * 100
+                    break
+            else:
+                page_info['hourly_tasks_completed'] = 0
+                page_info['hourly_tasks_total'] = 15
+                page_info['hourly_progress'] = 0
+
+            # استخراج إعلانات اليوم - من الـ JavaScript variables أولاً
+            daily_patterns = [
+                r'todayTasks["\']?\s*:\s*(\d+)',  # JavaScript variable
+                r'today-tasks["\']?>(\d+)<',  # HTML element
+                r'id="daily-tasks">(\d+)<',  # HTML id
+                r'Daily.*?(\d+)/(\d+)',  # Text pattern
+            ]
+            for pattern in daily_patterns:
+                daily_match = re.search(pattern, resp.text, re.IGNORECASE)
+                if daily_match:
+                    page_info['daily_tasks_completed'] = int(daily_match.group(1))
+                    page_info['daily_tasks_total'] = 30  # الافتراضي الصحيح للـ BEAMX
+                    page_info['daily_progress'] = (page_info['daily_tasks_completed'] / 30) * 100
+                    break
+            else:
+                page_info['daily_tasks_completed'] = 0
+                page_info['daily_tasks_total'] = 30
+                page_info['daily_progress'] = 0
+
+            # تحديد إمكانية التعدين
+            if page_info['daily_progress'] < 100 and page_info['hourly_progress'] < 100:
+                page_info['can_mine'] = True
+
+            logger.info(f"معلومات BEAMX: الرصيد={page_info['balance']}, اليوم={page_info['daily_tasks_completed']}/100, الساعة={page_info['hourly_tasks_completed']}/20")
+
+        except Exception as e:
+            logger.error(f"خطأ في تحليل صفحة BEAMX: {e}")
+
+        return page_info, url
 
     def beamx_get_task_id(self, session, init_data, referer):
-        url = f"https://botsmother.com/api/command/MTAwMC84MTI3?initData={init_data}"  # Replace with actual URL
+        url = f"https://botsmother.com/api/command/MTAyOQ==/ODQ1Ng==?initData={init_data}"
         headers = {
             "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1",
             "Accept": "*/*",
@@ -337,12 +408,16 @@ class MiningCore:
         resp = session.get(url, headers=headers)
         try:
             data = resp.json()
-            return data.get("task_id")
-        except Exception:
+            # التحقق من وجود status وأنه True
+            if data.get("status") == True and "task_id" in data:
+                return data.get("task_id")
+            return None
+        except Exception as e:
+            logger.error(f"خطأ في جلب task_id للـ BEAMX: {e}")
             return None
 
     def beamx_complete_task(self, session, init_data, task_id, referer):
-        url = f"https://botsmother.com/api/command/MTAwMC84MTI4?initData={init_data}&task_id={task_id}"  # Replace with actual URL
+        url = f"https://botsmother.com/api/command/MTAyOQ==/ODQ1Nw==?initData={init_data}&task_id={task_id}"
         headers = {
             "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1",
             "Accept": "*/*",
@@ -425,14 +500,14 @@ class MiningCore:
                         operation_log['status'] = 'نجح'
                         operation_log['details'] = f'تم العثور على {tasks} مهمة'
                         self.add_operation_log(user_id, operation_log.copy())
-                        
+
                         operation_log['step'] = 'جلب Task ID'
                         task_id = self.banan_get_task_id(session, init_data, referer)
                         if task_id:
                             operation_log['status'] = 'نجح'
                             operation_log['details'] = f'Task ID: {task_id}'
                             self.add_operation_log(user_id, operation_log.copy())
-                            
+
                             # انتظار 10 ثواني للتأكد من مشاهدة الإعلان
                             operation_log['step'] = 'انتظار'
                             operation_log['status'] = 'جاري'
@@ -440,7 +515,7 @@ class MiningCore:
                             self.add_operation_log(user_id, operation_log.copy())
                             logger.info(f"انتظار 10 ثواني قبل إكمال المهمة - {mining_type} - المستخدم {user_id}")
                             time.sleep(10)
-                            
+
                             operation_log['step'] = 'إكمال المهمة'
                             result = self.banan_complete_task(session, init_data, task_id, referer)
                             if result:
@@ -466,14 +541,14 @@ class MiningCore:
                         operation_log['status'] = 'نجح'
                         operation_log['details'] = f'تم العثور على {tasks} مهمة'
                         self.add_operation_log(user_id, operation_log.copy())
-                        
+
                         operation_log['step'] = 'جلب Task ID'
                         task_id = self.trx_get_task_id(session, init_data, referer)
                         if task_id:
                             operation_log['status'] = 'نجح'
                             operation_log['details'] = f'Task ID: {task_id}'
                             self.add_operation_log(user_id, operation_log.copy())
-                            
+
                             # انتظار 10 ثواني
                             operation_log['step'] = 'انتظار'
                             operation_log['status'] = 'جاري'
@@ -481,7 +556,7 @@ class MiningCore:
                             self.add_operation_log(user_id, operation_log.copy())
                             logger.info(f"انتظار 10 ثواني قبل إكمال المهمة - {mining_type} - المستخدم {user_id}")
                             time.sleep(10)
-                            
+
                             operation_log['step'] = 'إكمال المهمة'
                             result = self.trx_complete_task(session, init_data, task_id, referer)
                             if result:
@@ -507,14 +582,14 @@ class MiningCore:
                         operation_log['status'] = 'نجح'
                         operation_log['details'] = f'تم العثور على {tasks} مهمة'
                         self.add_operation_log(user_id, operation_log.copy())
-                        
+
                         operation_log['step'] = 'جلب Task ID'
                         task_id = self.shib_get_task_id(session, init_data, referer)
                         if task_id:
                             operation_log['status'] = 'نجح'
                             operation_log['details'] = f'Task ID: {task_id}'
                             self.add_operation_log(user_id, operation_log.copy())
-                            
+
                             # انتظار 10 ثواني
                             operation_log['step'] = 'انتظار'
                             operation_log['status'] = 'جاري'
@@ -522,7 +597,7 @@ class MiningCore:
                             self.add_operation_log(user_id, operation_log.copy())
                             logger.info(f"انتظار 10 ثواني قبل إكمال المهمة - {mining_type} - المستخدم {user_id}")
                             time.sleep(10)
-                            
+
                             operation_log['step'] = 'إكمال المهمة'
                             result = self.shib_complete_task(session, init_data, task_id, referer)
                             if result:
@@ -545,13 +620,13 @@ class MiningCore:
                     operation_log['step'] = 'فحص المهام المكتملة'
                     tasks_completed, referer = self.coin_get_hourly_tasks(session, init_data)
                     max_tasks = max_daily_tasks.get(mining_type, 20)
-                    
+
                     if tasks_completed is not None:
                         remaining_tasks = max_tasks - tasks_completed
                         operation_log['status'] = 'نجح'
                         operation_log['details'] = f'المهام المكتملة: {tasks_completed}/{max_tasks} - المتبقي: {remaining_tasks}'
                         self.add_operation_log(user_id, operation_log.copy())
-                        
+
                         # التحقق من الوصول للحد الأقصى
                         if tasks_completed >= max_tasks:
                             operation_log['step'] = 'تم الوصول للحد الأقصى'
@@ -561,14 +636,14 @@ class MiningCore:
                             logger.info(f"تم الوصول للحد الأقصى للمهام - {mining_type} - المستخدم {user_id}")
                             time.sleep(3600)  # انتظار ساعة كاملة
                             continue
-                        
+
                         operation_log['step'] = 'جلب Task ID'
                         task_id = self.coin_get_task_id(session, init_data, referer)
                         if task_id:
                             operation_log['status'] = 'نجح'
                             operation_log['details'] = f'Task ID: {task_id}'
                             self.add_operation_log(user_id, operation_log.copy())
-                            
+
                             # انتظار 10 ثواني
                             operation_log['step'] = 'انتظار'
                             operation_log['status'] = 'جاري'
@@ -576,7 +651,7 @@ class MiningCore:
                             self.add_operation_log(user_id, operation_log.copy())
                             logger.info(f"انتظار 10 ثواني قبل إكمال المهمة - {mining_type} - المستخدم {user_id}")
                             time.sleep(10)
-                            
+
                             operation_log['step'] = 'إكمال المهمة'
                             result = self.coin_complete_task(session, init_data, task_id, referer)
                             if result:
@@ -596,45 +671,72 @@ class MiningCore:
                     self.add_operation_log(user_id, operation_log.copy())
 
                 elif mining_type == 'BEAMX':
-                    operation_log['step'] = 'جلب المهام'
-                    tasks, referer = self.beamx_get_hourly_tasks(session, init_data)
-                    if tasks:
-                        operation_log['status'] = 'نجح'
-                        operation_log['details'] = f'تم العثور على {tasks} مهمة'
+                    operation_log['step'] = 'فحص الصفحة الرئيسية'
+                    page_info, referer = self.beamx_get_page_info(session, init_data)
+
+                    # تحديث معلومات المستخدم
+                    operation_log['status'] = 'نجح'
+                    operation_log['details'] = f"الرصيد: {page_info['balance']}, يومي: {page_info['daily_tasks_completed']}/100, ساعة: {page_info['hourly_tasks_completed']}/20"
+                    self.add_operation_log(user_id, operation_log.copy())
+
+                    # فحص إذا كانت المهام اليومية مكتملة
+                    if page_info['daily_progress'] >= 100:
+                        operation_log['step'] = 'مهام يومية مكتملة'
+                        operation_log['status'] = 'توقف'
+                        operation_log['details'] = 'تم إنجاز جميع المهام اليومية - سيتم إعادة التشغيل بعد UTC+3'
                         self.add_operation_log(user_id, operation_log.copy())
-                        
+                        logger.info(f"مهام BEAMX اليومية مكتملة للمستخدم {user_id} - توقف حتى اليوم التالي")
+                        time.sleep(600)  # انتظار 10 دقائق ثم إعادة فحص
+                        continue
+
+                    # فحص إذا كانت مهام الساعة مكتملة
+                    if page_info['hourly_progress'] >= 100:
+                        operation_log['step'] = 'مهام ساعة مكتملة'
+                        operation_log['status'] = 'انتظار'
+                        operation_log['details'] = 'تم إنجاز جميع مهام الساعة - انتظار 10 دقائق'
+                        self.add_operation_log(user_id, operation_log.copy())
+                        logger.info(f"مهام BEAMX الساعة مكتملة للمستخدم {user_id} - انتظار 10 دقائق")
+                        time.sleep(600)  # انتظار 10 دقائق
+                        continue
+
+                    # إذا كان التعدين متاح
+                    if page_info['can_mine']:
                         operation_log['step'] = 'جلب Task ID'
                         task_id = self.beamx_get_task_id(session, init_data, referer)
                         if task_id:
                             operation_log['status'] = 'نجح'
                             operation_log['details'] = f'Task ID: {task_id}'
                             self.add_operation_log(user_id, operation_log.copy())
-                            
-                            # انتظار 10 ثواني
+
+                            # انتظار 11 ثانية
                             operation_log['step'] = 'انتظار'
                             operation_log['status'] = 'جاري'
-                            operation_log['details'] = 'انتظار 10 ثواني لمشاهدة الإعلان'
+                            operation_log['details'] = 'انتظار 11 ثانية لمشاهدة الإعلان'
                             self.add_operation_log(user_id, operation_log.copy())
-                            logger.info(f"انتظار 10 ثواني قبل إكمال المهمة - {mining_type} - المستخدم {user_id}")
-                            time.sleep(10)
-                            
+                            logger.info(f"انتظار 11 ثانية قبل إكمال المهمة - {mining_type} - المستخدم {user_id}")
+                            time.sleep(11)
+
                             operation_log['step'] = 'إكمال المهمة'
                             result = self.beamx_complete_task(session, init_data, task_id, referer)
-                            if result:
+                            if result and isinstance(result, dict) and result.get('status') == True:
                                 operation_log['status'] = 'نجح'
-                                operation_log['details'] = f'تم إكمال المهمة بنجاح: {result}'
+                                balance = result.get('balance', 'غير محدد')
+                                hourly_tasks = result.get('hourlyTasks', 'غير محدد')
+                                operation_log['details'] = f'تم إكمال المهمة بنجاح! الرصيد: {balance}, المهام: {hourly_tasks}'
                                 self.user_sessions[user_id]['mining_types'][mining_type] += 1
                                 self.user_sessions[user_id]['total_tasks'] += 1
                             else:
                                 operation_log['status'] = 'فشل'
-                                operation_log['details'] = 'فشل في إكمال المهمة'
+                                operation_log['details'] = f'فشل في إكمال المهمة: {result}'
+                            self.add_operation_log(user_id, operation_log.copy())
                         else:
                             operation_log['status'] = 'فشل'
                             operation_log['details'] = 'فشل في الحصول على Task ID'
+                            self.add_operation_log(user_id, operation_log.copy())
                     else:
-                        operation_log['status'] = 'فشل'
-                        operation_log['details'] = 'فشل في جلب المهام'
-                    self.add_operation_log(user_id, operation_log.copy())
+                        operation_log['status'] = 'متوقف'
+                        operation_log['details'] = 'التعدين غير متاح حالياً'
+                        self.add_operation_log(user_id, operation_log.copy())
 
                 # حفظ البيانات
                 self.save_user_data()
@@ -644,7 +746,7 @@ class MiningCore:
                 operation_log['status'] = 'جاري'
                 operation_log['details'] = 'انتظار 5 ثواني قبل البحث عن مهام جديدة'
                 self.add_operation_log(user_id, operation_log.copy())
-                
+
                 logger.info(f"انتظار 5 ثواني قبل المحاولة التالية - {mining_type} - المستخدم {user_id}")
                 time.sleep(5)
 
@@ -653,6 +755,15 @@ class MiningCore:
                 time.sleep(5)  # انتظار 5 ثواني عند حدوث خطأ
 
         logger.info(f"توقف التعدين للمستخدم {user_id} - نوع التعدين: {mining_type}")
+
+    def extract_init_data_from_url(self, url):
+        """استخراج initData من الرابط الكامل للبوت"""
+        # استخراج الجزء المشفر بعد tgWebAppData=
+        match = re.search(r'tgWebAppData=([^&]+)', url)
+        if match:
+            return match.group(1)
+        # إذا كان الرابط يحتوي على initData مباشرة (الشكل القديم)
+        return url
 
     def start_mining(self, user_id, mining_type, init_data, custom_user_agent=None):
         """بدء التعدين"""
@@ -686,9 +797,12 @@ class MiningCore:
                 self.user_sessions[user_id]['custom_user_agent'] = custom_user_agent
                 self.user_sessions[user_id]['use_custom_ua'] = True
 
-            # إضافة الرابط إلى السجل
+            # استخراج initData من الرابط إذا كان رابط كامل
+            extracted_init_data = self.extract_init_data_from_url(init_data)
+
+            # حفظ الرابط الأصلي في السجل
             url_entry = {
-                'url': init_data,
+                'url': init_data,  # الرابط الأصلي الكامل
                 'mining_type': mining_type,
                 'timestamp': datetime.now().isoformat(),
                 'status': 'started'
@@ -698,7 +812,7 @@ class MiningCore:
             # بدء خيط التعدين
             thread = threading.Thread(
                 target=self.mining_worker,
-                args=(user_id, mining_type, init_data),
+                args=(user_id, mining_type, extracted_init_data),
                 daemon=True
             )
             thread.start()
@@ -774,9 +888,47 @@ class MiningCore:
 
     def get_url_history(self, user_id):
         """الحصول على سجل الروابط للمستخدم"""
-        if user_id in self.user_sessions:
-            return self.user_sessions[user_id].get('url_history', [])
-        return []
+        if user_id not in self.user_sessions:
+            return []
+
+        # جمع الروابط من url_history و saved_urls
+        history = []
+
+        # إضافة الروابط من url_history (الروابط القديمة)
+        url_history = self.user_sessions[user_id].get('url_history', [])
+        for entry in url_history:
+            history.append({
+                'mining_type': entry.get('mining_type', 'غير محدد'),
+                'url': entry.get('url', ''),
+                'timestamp': entry.get('timestamp', ''),
+                'status': entry.get('status', 'غير محدد')
+            })
+
+        # إضافة الروابط من saved_urls (الروابط المحفوظة حالياً)
+        saved_urls = self.user_sessions[user_id].get('saved_urls', {})
+        for mining_type, url_data in saved_urls.items():
+            if isinstance(url_data, list):
+                # إذا كانت قائمة من الروابط
+                for url_entry in url_data:
+                    history.append({
+                        'mining_type': mining_type,
+                        'url': url_entry.get('url', ''),
+                        'timestamp': url_entry.get('added_at', ''),
+                        'status': 'محفوظ'
+                    })
+            elif isinstance(url_data, str):
+                # إذا كان رابط واحد (النظام القديم)
+                history.append({
+                    'mining_type': mining_type,
+                    'url': url_data,
+                    'timestamp': self.user_sessions[user_id].get('created_at', ''),
+                    'status': 'محفوظ'
+                })
+
+        # ترتيب التاريخ من الأحدث للأقدم
+        history.sort(key=lambda x: x.get('timestamp', ''), reverse=True)
+
+        return history
 
     def clear_url_history(self, user_id):
         """مسح سجل الروابط للمستخدم"""
@@ -797,16 +949,16 @@ class MiningCore:
         try:
             if user_id not in self.user_sessions:
                 return
-            
+
             if 'operation_logs' not in self.user_sessions[user_id]:
                 self.user_sessions[user_id]['operation_logs'] = []
-            
+
             # الاحتفاظ بآخر 50 سجل فقط
             if len(self.user_sessions[user_id]['operation_logs']) >= 50:
                 self.user_sessions[user_id]['operation_logs'].pop(0)
-            
+
             self.user_sessions[user_id]['operation_logs'].append(log_entry)
-            
+
         except Exception as e:
             logger.error(f"خطأ في إضافة سجل العملية: {e}")
 

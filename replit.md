@@ -2,6 +2,27 @@
 
 This is a Flask-based cryptocurrency mining automation platform with a web interface in Arabic. The application provides a centralized dashboard for managing multiple mining operations through Telegram bot integrations. Users can configure mining URLs, monitor active mining sessions, and manage their cryptocurrency mining activities through a modern web interface.
 
+**Status**: Production-ready for deployment on Zeabur, Heroku, Railway, and other cloud platforms.
+
+## Recent Changes (August 4, 2025)
+
+✓ **BEAMX Mining Fix**: Fixed "dot button" functionality with correct API endpoints
+✓ **URL Processing**: Added function to extract tgWebAppData from full bot URLs
+✓ **Task ID Handling**: Improved BEAMX task_id extraction with proper status validation
+✓ **Mining Logic**: Updated waiting time to 11 seconds for successful task completion
+✓ **Page Information Reading**: Enhanced to read accurate balance, daily tasks (17/30), and hourly tasks (15/15) from JavaScript variables
+✓ **Intelligent Mining Logic**: Implemented proper task completion detection - stops when daily tasks 100% complete until UTC+3, waits 10 minutes when hourly tasks 100% complete
+✓ **Multiple URLs Support**: Added support for multiple URLs per user (up to 100 links) with textarea inputs and batch processing
+✓ **Enhanced UI**: Updated interface to show mining information with detailed progress indicators
+✓ **Background Processing**: Improved mining logic to use proper IP and User-Agent handling for background operations
+✓ **Data Extraction**: Fixed regex patterns to extract accurate information from JavaScript variables instead of HTML parsing
+✓ **Deployment Optimization**: Fixed all deployment issues for cloud hosting
+✓ **Port Configuration**: Added dynamic PORT environment variable support
+✓ **Gunicorn Integration**: Optimized for production with proper Procfile
+✓ **Health Check**: Added /health endpoint for service monitoring
+✓ **Security**: Strengthened secret key management for production
+✓ **Documentation**: Added comprehensive deployment guides and README
+
 # User Preferences
 
 Preferred communication style: Simple, everyday language.

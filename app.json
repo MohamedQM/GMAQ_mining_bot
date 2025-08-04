@@ -1,0 +1,32 @@
+{
+  "name": "Arabic Crypto Mining Platform",
+  "description": "منصة ويب عربية متطورة لأتمتة عمليات التعدين عبر بوتات التليجرام",
+  "repository": "https://github.com/your-username/crypto-mining-platform",
+  "logo": "https://avatars.githubusercontent.com/u/your-username",
+  "keywords": ["flask", "python", "crypto", "mining", "arabic", "telegram"],
+  "stack": "heroku-20",
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ],
+  "env": {
+    "SESSION_SECRET": {
+      "description": "Secret key for session management",
+      "generator": "secret"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    }
+  },
+  "addons": [],
+  "scripts": {},
+  "environments": {
+    "test": {},
+    "staging": {},
+    "production": {}
+  }
+}

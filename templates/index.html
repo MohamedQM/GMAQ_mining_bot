@@ -129,15 +129,18 @@
                         </div>
                         <p class="mining-description">{{ custom_links.coin.description }}</p>
                         <div class="mining-controls">
-                            <input type="url" class="form-control mb-2" id="coinUrl" 
-                                   placeholder="ضع رابط التعدين هنا...">
-                            <div class="btn-group w-100">
+                            <textarea class="form-control mb-2" id="coinUrl" rows="3"
+                                   placeholder="ضع روابط التعدين هنا... (يمكنك إضافة عدة روابط، كل رابط في سطر منفصل)"></textarea>
+                            <div class="btn-group w-100 mb-2">
                                 <button class="btn btn-success" onclick="startMining('COIN')">
                                     <i class="fas fa-play"></i> بدء التعدين
                                 </button>
                                 <button class="btn btn-danger" onclick="stopMining('COIN')">
                                     <i class="fas fa-stop"></i> إيقاف
                                 </button>
+                            </div>
+                            <div class="mining-info">
+                                <small id="coinInfo" class="text-muted">معلومات التعدين ستظهر هنا...</small>
                             </div>
                         </div>
                         <div class="mining-stats">
@@ -156,15 +159,18 @@
                         </div>
                         <p class="mining-description">{{ custom_links.banan.description }}</p>
                         <div class="mining-controls">
-                            <input type="url" class="form-control mb-2" id="bananUrl" 
-                                   placeholder="ضع رابط التعدين هنا...">
-                            <div class="btn-group w-100">
+                            <textarea class="form-control mb-2" id="bananUrl" rows="3"
+                                   placeholder="ضع روابط التعدين هنا... (يمكنك إضافة عدة روابط، كل رابط في سطر منفصل)"></textarea>
+                            <div class="btn-group w-100 mb-2">
                                 <button class="btn btn-success" onclick="startMining('BANAN')">
                                     <i class="fas fa-play"></i> بدء التعدين
                                 </button>
                                 <button class="btn btn-danger" onclick="stopMining('BANAN')">
                                     <i class="fas fa-stop"></i> إيقاف
                                 </button>
+                            </div>
+                            <div class="mining-info">
+                                <small id="bananInfo" class="text-muted">معلومات التعدين ستظهر هنا...</small>
                             </div>
                         </div>
                         <div class="mining-stats">
@@ -183,15 +189,18 @@
                         </div>
                         <p class="mining-description">{{ custom_links.trx.description }}</p>
                         <div class="mining-controls">
-                            <input type="url" class="form-control mb-2" id="trxUrl" 
-                                   placeholder="ضع رابط التعدين هنا...">
-                            <div class="btn-group w-100">
+                            <textarea class="form-control mb-2" id="trxUrl" rows="3"
+                                   placeholder="ضع روابط التعدين هنا... (يمكنك إضافة عدة روابط، كل رابط في سطر منفصل)"></textarea>
+                            <div class="btn-group w-100 mb-2">
                                 <button class="btn btn-success" onclick="startMining('TRX')">
                                     <i class="fas fa-play"></i> بدء التعدين
                                 </button>
                                 <button class="btn btn-danger" onclick="stopMining('TRX')">
                                     <i class="fas fa-stop"></i> إيقاف
                                 </button>
+                            </div>
+                            <div class="mining-info">
+                                <small id="trxInfo" class="text-muted">معلومات التعدين ستظهر هنا...</small>
                             </div>
                         </div>
                         <div class="mining-stats">
@@ -210,15 +219,18 @@
                         </div>
                         <p class="mining-description">{{ custom_links.shib.description }}</p>
                         <div class="mining-controls">
-                            <input type="url" class="form-control mb-2" id="shibUrl" 
-                                   placeholder="ضع رابط التعدين هنا...">
-                            <div class="btn-group w-100">
+                            <textarea class="form-control mb-2" id="shibUrl" rows="3"
+                                   placeholder="ضع روابط التعدين هنا... (يمكنك إضافة عدة روابط، كل رابط في سطر منفصل)"></textarea>
+                            <div class="btn-group w-100 mb-2">
                                 <button class="btn btn-success" onclick="startMining('SHIB')">
                                     <i class="fas fa-play"></i> بدء التعدين
                                 </button>
                                 <button class="btn btn-danger" onclick="stopMining('SHIB')">
                                     <i class="fas fa-stop"></i> إيقاف
                                 </button>
+                            </div>
+                            <div class="mining-info">
+                                <small id="shibInfo" class="text-muted">معلومات التعدين ستظهر هنا...</small>
                             </div>
                         </div>
                         <div class="mining-stats">
@@ -237,15 +249,18 @@
                         </div>
                         <p class="mining-description">{{ custom_links.beamx.description }}</p>
                         <div class="mining-controls">
-                            <input type="url" class="form-control mb-2" id="beamxUrl" 
-                                   placeholder="ضع رابط التعدين هنا...">
-                            <div class="btn-group w-100">
+                            <textarea class="form-control mb-2" id="beamxUrl" rows="3"
+                                   placeholder="ضع روابط التعدين هنا... (يمكنك إضافة عدة روابط، كل رابط في سطر منفصل)"></textarea>
+                            <div class="btn-group w-100 mb-2">
                                 <button class="btn btn-success" onclick="startMining('BEAMX')">
                                     <i class="fas fa-play"></i> بدء التعدين
                                 </button>
                                 <button class="btn btn-danger" onclick="stopMining('BEAMX')">
                                     <i class="fas fa-stop"></i> إيقاف
                                 </button>
+                            </div>
+                            <div class="mining-info">
+                                <small id="beamxInfo" class="text-muted">معلومات التعدين ستظهر هنا...</small>
                             </div>
                         </div>
                         <div class="mining-stats">

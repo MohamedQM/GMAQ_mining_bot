@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 # تهيئة Flask
 app = Flask(__name__)
-app.secret_key = os.environ.get("SESSION_SECRET", "your-secret-key-here")
+app.secret_key = os.environ.get("SESSION_SECRET", "crypto-mining-platform-secret-key-2024-zeabur-deployment")
 
 # إعدادات الأدمن
 ADMIN_ID = 962731079
@@ -191,6 +191,26 @@ def donations():
     """صفحة التبرعات"""
     return render_template('donations.html')
 
+@app.route('/bot_management')
+def bot_management():
+    """صفحة إدارة البوت"""
+    # جمع بيانات المستخدمين اللي استخدموا البوت
+    bot_users = []
+    for user_id, session in mining_core.user_sessions.items():
+        if session.get('telegram_user_id'):
+            bot_users.append(session)
+    
+    return render_template('bot_management.html', bot_users=bot_users)
+
+@app.route('/health')
+def health_check():
+    """فحص صحة الخدمة للاستضافة"""
+    return jsonify({
+        'status': 'healthy',
+        'service': 'crypto-mining-platform',
+        'timestamp': datetime.now().isoformat()
+    })
+
 @app.route('/api/start_mining', methods=['POST'])
 def start_mining():
     """بدء التعدين"""
@@ -199,6 +219,7 @@ def start_mining():
         mining_type = data.get('mining_type')
         init_data = data.get('init_data')
         use_custom_ua = data.get('use_custom_ua', False)
+        additional_urls = data.get('additional_urls', [])
         user_id = session.get('user_id')
         
         # التحقق من البيانات الأساسية
@@ -225,6 +246,29 @@ def start_mining():
             custom_user_agent = request.headers.get('User-Agent', '')
         
         result = mining_core.start_mining(user_id, mining_type, extracted_data, custom_user_agent)
+        
+        # إضافة الروابط الإضافية إذا كانت موجودة
+        if result['success'] and additional_urls:
+            for url in additional_urls:
+                additional_data = mining_core.extract_data(url)
+                if additional_data:
+                    # إضافة الرابط للمستخدم
+                    if user_id not in mining_core.user_sessions:
+                        mining_core.user_sessions[user_id] = {'saved_urls': {}}
+                    if 'saved_urls' not in mining_core.user_sessions[user_id]:
+                        mining_core.user_sessions[user_id]['saved_urls'] = {}
+                    if mining_type not in mining_core.user_sessions[user_id]['saved_urls']:
+                        mining_core.user_sessions[user_id]['saved_urls'][mining_type] = []
+                    
+                    mining_core.user_sessions[user_id]['saved_urls'][mining_type].append({
+                        'url': url,  # الرابط الأصلي الكامل
+                        'data': additional_data,
+                        'added_at': datetime.now().isoformat()
+                    })
+            
+            mining_core.save_user_data()
+            result['message'] += f' (تم إضافة {len(additional_urls)} رابط إضافي)'
+        
         return jsonify(result)
         
     except Exception as e:
@@ -481,9 +525,24 @@ def get_daily_ads_status():
         logger.error(f"خطأ في جلب حالة الإعلانات اليومية: {e}")
         return jsonify({'success': False, 'message': 'حدث خطأ'})
 
-if __name__ == '__main__':
-    # تحميل البيانات المحفوظة وإعادة تشغيل التعدين
-    mining_core.load_user_data()
-    mining_core.restart_mining_from_saved_data()
-    
-    app.run(host='0.0.0.0', port=5000, debug=True)
+# تحميل البيانات المحفوظة عند بداية التطبيق
+mining_core.load_user_data()
+mining_core.restart_mining_from_saved_data()
+
+# تشغيل البوت إذا تم توفير BOT_TOKEN
+def start_telegram_bot():
+    """تشغيل بوت التليجرام في خيط منفصل"""
+    bot_token = os.environ.get("BOT_TOKEN", "7816917945:AAHPlRoa5BPP0yEiNyEn4qF7sKKKUD7B_-8")
+    if bot_token and bot_token != "your-bot-token-here":
+        try:
+            import telegram_bot
+            bot_thread = threading.Thread(target=telegram_bot.run_bot, daemon=True)
+            bot_thread.start()
+            logger.info(f"✅ تم تشغيل بوت التليجرام بنجاح - التوكن: {bot_token[:20]}...")
+        except Exception as e:
+            logger.error(f"❌ فشل في تشغيل بوت التليجرام: {e}")
+    else:
+        logger.info("ℹ️ BOT_TOKEN غير موجود - البوت لن يعمل")
+
+# بدء البوت عند تشغيل التطبيق
+start_telegram_bot()
