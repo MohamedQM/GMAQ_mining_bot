@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحة التبرعات - منصة التعدين</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="text-center my-5">
+            <h1 class="display-4">
+                <i class="fas fa-heart text-danger"></i>
+                صفحة التبرعات
+            </h1>
+            <p class="lead">ادعم المشروع وساعدنا في الاستمرار</p>
+        </div>
+
+        <!-- Back Button -->
+        <div class="text-center mb-4">
+            <a href="{{ url_for('index') }}" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-right"></i>
+                العودة للصفحة الرئيسية
+            </a>
+        </div>
+
+        <!-- Donation Cards -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                
+                <!-- USDT BEP20 -->
+                <div class="donation-card">
+                    <div class="crypto-header">
+                        <div class="crypto-icon">
+                            <i class="fab fa-ethereum text-warning"></i>
+                        </div>
+                        <div>
+                            <h4>USDT BEP20</h4>
+                            <p class="text-muted mb-0">Binance Smart Chain</p>
+                        </div>
+                    </div>
+                    
+                    <div class="wallet-address">
+                        <div class="address-container">
+                            <code id="usdtAddress">0x3ee6550b6c466a17f6598f8d5ff8a6e972ce2f58</code>
+                            <button class="btn btn-outline-primary btn-sm copy-btn" onclick="copyAddress('usdtAddress')">
+                                <i class="fas fa-copy"></i>
+                                نسخ
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="qr-code-container">
+                        <div id="usdtQR"></div>
+                        <small class="text-muted">امسح الكود ضوئيًا للتبرع</small>
+                    </div>
+                </div>
+
+                <!-- Bitcoin -->
+                <div class="donation-card">
+                    <div class="crypto-header">
+                        <div class="crypto-icon">
+                            <i class="fab fa-bitcoin text-warning"></i>
+                        </div>
+                        <div>
+                            <h4>Bitcoin (BTC)</h4>
+                            <p class="text-muted mb-0">Bitcoin Network</p>
+                        </div>
+                    </div>
+                    
+                    <div class="wallet-address">
+                        <div class="address-container">
+                            <code id="btcAddress">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</code>
+                            <button class="btn btn-outline-primary btn-sm copy-btn" onclick="copyAddress('btcAddress')">
+                                <i class="fas fa-copy"></i>
+                                نسخ
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="qr-code-container">
+                        <div id="btcQR"></div>
+                        <small class="text-muted">امسح الكود ضوئيًا للتبرع</small>
+                    </div>
+                </div>
+
+                <!-- Ethereum -->
+                <div class="donation-card">
+                    <div class="crypto-header">
+                        <div class="crypto-icon">
+                            <i class="fab fa-ethereum text-primary"></i>
+                        </div>
+                        <div>
+                            <h4>Ethereum (ETH)</h4>
+                            <p class="text-muted mb-0">Ethereum Network</p>
+                        </div>
+                    </div>
+                    
+                    <div class="wallet-address">
+                        <div class="address-container">
+                            <code id="ethAddress">0x3ee6550b6c466a17f6598f8d5ff8a6e972ce2f58</code>
+                            <button class="btn btn-outline-primary btn-sm copy-btn" onclick="copyAddress('ethAddress')">
+                                <i class="fas fa-copy"></i>
+                                نسخ
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="qr-code-container">
+                        <div id="ethQR"></div>
+                        <small class="text-muted">امسح الكود ضوئيًا للتبرع</small>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Thank You Message -->
+        <div class="text-center my-5">
+            <div class="alert alert-success">
+                <h5>
+                    <i class="fas fa-heart text-danger"></i>
+                    شكرًا لدعمكم!
+                </h5>
+                <p class="mb-0">
+                    كل تبرع يساعدنا في تطوير المنصة وإضافة المزيد من الميزات المفيدة
+                </p>
+            </div>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="text-center mb-5">
+            <h5>للتواصل والاستفسارات</h5>
+            <p>
+                <i class="fab fa-telegram text-primary"></i>
+                <a href="https://t.me/yourusername" class="text-decoration-none">@yourusername</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="notificationToast" class="toast" role="alert">
+            <div class="toast-header">
+                <strong class="me-auto">إشعار</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body" id="toastMessage">
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+    
+    <script>
+        // توليد QR Codes باستخدام مكتبة بديلة
+        function generateQR(elementId, text) {
+            try {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    // إنشاء QR Code بـ SVG
+                    const qr = qrcode(4, 'M');
+                    qr.addData(text);
+                    qr.make();
+                    element.innerHTML = qr.createSvgTag({
+                        cellSize: 4,
+                        margin: 2,
+                        scalable: true
+                    });
+                    
+                    // تطبيق الأنماط
+                    const svg = element.querySelector('svg');
+                    if (svg) {
+                        svg.style.width = '200px';
+                        svg.style.height = '200px';
+                        svg.style.border = '2px solid #ddd';
+                        svg.style.borderRadius = '10px';
+                    }
+                }
+            } catch (error) {
+                console.error('Error generating QR code for', elementId, error);
+                // عرض رابط نصي بدلاً من QR Code
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.innerHTML = `<div class="text-center p-3 border rounded">
+                        <i class="fas fa-qrcode fa-3x text-muted mb-2"></i>
+                        <p class="text-muted">QR Code غير متاح</p>
+                        <small>${text}</small>
+                    </div>`;
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // USDT QR Code
+            generateQR('usdtQR', '0x3ee6550b6c466a17f6598f8d5ff8a6e972ce2f58');
+            
+            // Bitcoin QR Code  
+            generateQR('btcQR', 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh');
+            
+            // Ethereum QR Code
+            generateQR('ethQR', '0x3ee6550b6c466a17f6598f8d5ff8a6e972ce2f58');
+        });
+
+        // نسخ العنوان
+        function copyAddress(addressId) {
+            const addressElement = document.getElementById(addressId);
+            const address = addressElement.textContent;
+            
+            navigator.clipboard.writeText(address).then(function() {
+                showNotification('تم نسخ العنوان بنجاح!', 'success');
+            }).catch(function() {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = address;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showNotification('تم نسخ العنوان بنجاح!', 'success');
+            });
+        }
+
+        // عرض الإشعارات
+        function showNotification(message, type = 'info') {
+            const toastElement = document.getElementById('notificationToast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.textContent = message;
+            
+            // تغيير لون التوست حسب النوع
+            toastElement.className = `toast ${type === 'success' ? 'bg-success text-white' : 
+                                     type === 'error' ? 'bg-danger text-white' : 
+                                     'bg-info text-white'}`;
+            
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+        }
+    </script>
+</body>
+</html>
