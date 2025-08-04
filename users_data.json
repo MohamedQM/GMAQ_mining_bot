@@ -1,0 +1,517 @@
+{
+  "users": {
+    "156214188202, 10811013": {
+      "username": "",
+      "user_ip": "",
+      "user_agent": "",
+      "user_location": {},
+      "created_at": "2025-08-04T10:32:26.160600",
+      "mining_types": {
+        "TRX": 0,
+        "BANAN": 10
+      },
+      "total_tasks": 10,
+      "start_date": "2025-08-04T10:32:26.160606",
+      "last_activity": "2025-08-04T10:38:21.244087",
+      "is_running": {
+        "TRX": true,
+        "BANAN": true
+      },
+      "saved_urls": {
+        "TRX": "query_id%3DAAGD9MdZAwAAAIP0x1nbHaQA%26user%3D%257B%2522id%2522%253A7948727427%252C%2522first_name%2522%253A%2522Ana%2522%252C%2522last_name%2522%253A%2522Baba%2522%252C%2522language_code%2522%253A%2522ar%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252FTUZOu3ms_T7-g1QACIbQ5O3XG_3XUC9ND-XqIofA274XEh2w5y8ZKWCX6ljrb5dW.svg%2522%257D%26auth_date%3D1754303503%26signature%3DzutZGg2UFIdul1TjUViOm8uGOqh0yYCplQu52ipk0YfyBkaoM7JbrTfPvmoKwKe9Ko0hFE9dpWF0evaj4QKiCQ%26hash%3D1214799da930265b8fe1261a96fcbf3c082328f87b97eb1a6ddf47af7b3c7c10",
+        "BANAN": "query_id%3DAAGD9MdZAwAAAIP0x1maEfjl%26user%3D%257B%2522id%2522%253A7948727427%252C%2522first_name%2522%253A%2522Ana%2522%252C%2522last_name%2522%253A%2522Baba%2522%252C%2522language_code%2522%253A%2522ar%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252FTUZOu3ms_T7-g1QACIbQ5O3XG_3XUC9ND-XqIofA274XEh2w5y8ZKWCX6ljrb5dW.svg%2522%257D%26auth_date%3D1754303574%26signature%3DSC9lhxWjCWgHdQHHGr4vf4httcX7-8Lm0n3qPXQZFIb7jaMSmucDRDdqIo48HbF7BW-pZU08Fp6Tt-NyhJ-wCQ%26hash%3D576a66dac0be1b234821348747a2ffef38211f26b8d19453b973daa1283c5926"
+      },
+      "url_history": [
+        {
+          "url": "query_id%3DAAGD9MdZAwAAAIP0x1nbHaQA%26user%3D%257B%2522id%2522%253A7948727427%252C%2522first_name%2522%253A%2522Ana%2522%252C%2522last_name%2522%253A%2522Baba%2522%252C%2522language_code%2522%253A%2522ar%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252FTUZOu3ms_T7-g1QACIbQ5O3XG_3XUC9ND-XqIofA274XEh2w5y8ZKWCX6ljrb5dW.svg%2522%257D%26auth_date%3D1754303503%26signature%3DzutZGg2UFIdul1TjUViOm8uGOqh0yYCplQu52ipk0YfyBkaoM7JbrTfPvmoKwKe9Ko0hFE9dpWF0evaj4QKiCQ%26hash%3D1214799da930265b8fe1261a96fcbf3c082328f87b97eb1a6ddf47af7b3c7c10",
+          "mining_type": "TRX",
+          "timestamp": "2025-08-04T10:32:26.160610",
+          "status": "started"
+        },
+        {
+          "url": "query_id%3DAAGD9MdZAwAAAIP0x1maEfjl%26user%3D%257B%2522id%2522%253A7948727427%252C%2522first_name%2522%253A%2522Ana%2522%252C%2522last_name%2522%253A%2522Baba%2522%252C%2522language_code%2522%253A%2522ar%2522%252C%2522allows_write_to_pm%2522%253Atrue%252C%2522photo_url%2522%253A%2522https%253A%255C%252F%255C%252Ft.me%255C%252Fi%255C%252Fuserpic%255C%252F320%255C%252FTUZOu3ms_T7-g1QACIbQ5O3XG_3XUC9ND-XqIofA274XEh2w5y8ZKWCX6ljrb5dW.svg%2522%257D%26auth_date%3D1754303574%26signature%3DSC9lhxWjCWgHdQHHGr4vf4httcX7-8Lm0n3qPXQZFIb7jaMSmucDRDdqIo48HbF7BW-pZU08Fp6Tt-NyhJ-wCQ%26hash%3D576a66dac0be1b234821348747a2ffef38211f26b8d19453b973daa1283c5926",
+          "mining_type": "BANAN",
+          "timestamp": "2025-08-04T10:33:31.401175",
+          "status": "started"
+        }
+      ],
+      "custom_user_agent": "",
+      "use_custom_ua": false,
+      "operation_logs": [
+        {
+          "timestamp": "2025-08-04T10:36:56.244110",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب المهام",
+          "status": "نجح",
+          "details": "تم العثور على 7 مهمة",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:36:56.244110",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب Task ID",
+          "status": "نجح",
+          "details": "Task ID: 2131386",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:36:56.244110",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "انتظار",
+          "status": "جاري",
+          "details": "انتظار 10 ثواني لمشاهدة الإعلان",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:00.475385",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب المهام",
+          "status": "فشل",
+          "details": "فشل في جلب المهام",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:00.475385",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "انتظار المحاولة التالية",
+          "status": "جاري",
+          "details": "انتظار 5 ثواني قبل البحث عن مهام جديدة",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:06.513293",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب المهام",
+          "status": "فشل",
+          "details": "فشل في جلب المهام",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:06.513293",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "انتظار المحاولة التالية",
+          "status": "جاري",
+          "details": "انتظار 5 ثواني قبل البحث عن مهام جديدة",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:36:56.244110",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "إكمال المهمة",
+          "status": "نجح",
+          "details": "تم إكمال المهمة بنجاح: {'status': True, 'message': 'Task completed and balance updated', 'balance': 43, 'todayTasks': 8, 'hourlyTasks': 8, 'totalEarned': 40, 'lifetimeTasks': 20}",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:36:56.244110",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "انتظار المحاولة التالية",
+          "status": "جاري",
+          "details": "انتظار 5 ثواني قبل البحث عن مهام جديدة",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:14.272240",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب المهام",
+          "status": "فشل",
+          "details": "فشل في جلب المهام",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:14.272240",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "انتظار المحاولة التالية",
+          "status": "جاري",
+          "details": "انتظار 5 ثواني قبل البحث عن مهام جديدة",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:15.848436",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب المهام",
+          "status": "نجح",
+          "details": "تم العثور على 8 مهمة",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:15.848436",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب Task ID",
+          "status": "نجح",
+          "details": "Task ID: 2131387",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:15.848436",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "انتظار",
+          "status": "جاري",
+          "details": "انتظار 10 ثواني لمشاهدة الإعلان",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:20.235806",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب المهام",
+          "status": "فشل",
+          "details": "فشل في جلب المهام",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:20.235806",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "انتظار المحاولة التالية",
+          "status": "جاري",
+          "details": "انتظار 5 ثواني قبل البحث عن مهام جديدة",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:26.531911",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب المهام",
+          "status": "فشل",
+          "details": "فشل في جلب المهام",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:26.531911",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "انتظار المحاولة التالية",
+          "status": "جاري",
+          "details": "انتظار 5 ثواني قبل البحث عن مهام جديدة",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:15.848436",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "إكمال المهمة",
+          "status": "نجح",
+          "details": "تم إكمال المهمة بنجاح: {'status': True, 'message': 'Task completed and balance updated', 'balance': 45, 'todayTasks': 9, 'hourlyTasks': 9, 'totalEarned': 42, 'lifetimeTasks': 21}",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:15.848436",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "انتظار المحاولة التالية",
+          "status": "جاري",
+          "details": "انتظار 5 ثواني قبل البحث عن مهام جديدة",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:32.391266",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب المهام",
+          "status": "فشل",
+          "details": "فشل في جلب المهام",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:32.391266",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "انتظار المحاولة التالية",
+          "status": "جاري",
+          "details": "انتظار 5 ثواني قبل البحث عن مهام جديدة",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:35.970809",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب المهام",
+          "status": "نجح",
+          "details": "تم العثور على 9 مهمة",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:35.970809",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب Task ID",
+          "status": "نجح",
+          "details": "Task ID: 2131388",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:35.970809",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "انتظار",
+          "status": "جاري",
+          "details": "انتظار 10 ثواني لمشاهدة الإعلان",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:38.267417",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب المهام",
+          "status": "فشل",
+          "details": "فشل في جلب المهام",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:38.267417",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "انتظار المحاولة التالية",
+          "status": "جاري",
+          "details": "انتظار 5 ثواني قبل البحث عن مهام جديدة",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:44.170295",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب المهام",
+          "status": "فشل",
+          "details": "فشل في جلب المهام",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:44.170295",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "انتظار المحاولة التالية",
+          "status": "جاري",
+          "details": "انتظار 5 ثواني قبل البحث عن مهام جديدة",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:35.970809",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "إكمال المهمة",
+          "status": "نجح",
+          "details": "تم إكمال المهمة بنجاح: {'status': True, 'message': 'Task completed and balance updated', 'balance': 47, 'todayTasks': 10, 'hourlyTasks': 10, 'totalEarned': 44, 'lifetimeTasks': 22}",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:35.970809",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "انتظار المحاولة التالية",
+          "status": "جاري",
+          "details": "انتظار 5 ثواني قبل البحث عن مهام جديدة",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:49.976559",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب المهام",
+          "status": "فشل",
+          "details": "فشل في جلب المهام",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:49.976559",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "انتظار المحاولة التالية",
+          "status": "جاري",
+          "details": "انتظار 5 ثواني قبل البحث عن مهام جديدة",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:55.860147",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب المهام",
+          "status": "فشل",
+          "details": "فشل في جلب المهام",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:55.860147",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "انتظار المحاولة التالية",
+          "status": "جاري",
+          "details": "انتظار 5 ثواني قبل البحث عن مهام جديدة",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:55.399084",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب المهام",
+          "status": "نجح",
+          "details": "تم العثور على 10 مهمة",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:55.399084",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب Task ID",
+          "status": "نجح",
+          "details": "Task ID: 2131389",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:55.399084",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "انتظار",
+          "status": "جاري",
+          "details": "انتظار 10 ثواني لمشاهدة الإعلان",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:38:01.733811",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب المهام",
+          "status": "فشل",
+          "details": "فشل في جلب المهام",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:38:01.733811",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "انتظار المحاولة التالية",
+          "status": "جاري",
+          "details": "انتظار 5 ثواني قبل البحث عن مهام جديدة",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:38:08.448020",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب المهام",
+          "status": "فشل",
+          "details": "فشل في جلب المهام",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:38:08.448020",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "انتظار المحاولة التالية",
+          "status": "جاري",
+          "details": "انتظار 5 ثواني قبل البحث عن مهام جديدة",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:55.399084",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "إكمال المهمة",
+          "status": "نجح",
+          "details": "تم إكمال المهمة بنجاح: {'status': True, 'message': 'Task completed and balance updated', 'balance': 49, 'todayTasks': 11, 'hourlyTasks': 11, 'totalEarned': 46, 'lifetimeTasks': 23}",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:37:55.399084",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "انتظار المحاولة التالية",
+          "status": "جاري",
+          "details": "انتظار 5 ثواني قبل البحث عن مهام جديدة",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:38:14.469475",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب المهام",
+          "status": "فشل",
+          "details": "فشل في جلب المهام",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:38:14.469475",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "انتظار المحاولة التالية",
+          "status": "جاري",
+          "details": "انتظار 5 ثواني قبل البحث عن مهام جديدة",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:38:15.062210",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب المهام",
+          "status": "نجح",
+          "details": "تم العثور على 11 مهمة",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:38:15.062210",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب Task ID",
+          "status": "نجح",
+          "details": "Task ID: 2131390",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:38:15.062210",
+          "mining_type": "BANAN",
+          "user_id": "156214188202, 10811013",
+          "step": "انتظار",
+          "status": "جاري",
+          "details": "انتظار 10 ثواني لمشاهدة الإعلان",
+          "error": null
+        },
+        {
+          "timestamp": "2025-08-04T10:38:20.363450",
+          "mining_type": "TRX",
+          "user_id": "156214188202, 10811013",
+          "step": "جلب المهام",
+          "status": "فشل",
+          "details": "فشل في جلب المهام",
+          "error": null
+        }
+      ]
+    },
+    "172316766": {
+      "username": "",
+      "user_ip": "151.115.60.234, 10.81.9.20",
+      "user_agent": "Mozilla/5.0 (Linux; Android 11; Infinix X698 Build/RP1A.200720.011; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/138.0.7204.168 Mobile Safari/537.36 Replit-Bonsai/2.143.2 (Android 11)",
+      "user_location": {
+        "country": "Poland",
+        "city": "Warsaw",
+        "flag": "pl"
+      },
+      "created_at": null,
+      "mining_types": {},
+      "total_tasks": 0,
+      "start_date": "2025-08-04T10:35:27.267941",
+      "last_activity": "2025-08-04T10:38:21.244100",
+      "is_running": {},
+      "saved_urls": {},
+      "url_history": [],
+      "custom_user_agent": "",
+      "use_custom_ua": false,
+      "operation_logs": []
+    }
+  },
+  "forced_channels": [],
+  "custom_links": {}
+}
