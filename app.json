@@ -1,10 +1,11 @@
+
 {
   "name": "Arabic Crypto Mining Platform",
   "description": "منصة ويب عربية متطورة لأتمتة عمليات التعدين عبر بوتات التليجرام",
   "repository": "https://github.com/your-username/crypto-mining-platform",
   "logo": "https://avatars.githubusercontent.com/u/your-username",
-  "keywords": ["flask", "python", "crypto", "mining", "arabic", "telegram"],
-  "stack": "heroku-20",
+  "keywords": ["flask", "python", "crypto", "mining", "arabic", "telegram", "automation"],
+  "stack": "heroku-22",
   "buildpacks": [
     {
       "url": "heroku/python"
@@ -13,17 +14,28 @@
   "env": {
     "SESSION_SECRET": {
       "description": "Secret key for session management",
-      "generator": "secret"
+      "generator": "secret",
+      "required": true
+    },
+    "PORT": {
+      "description": "Port number for the application",
+      "value": "5000"
+    },
+    "FLASK_ENV": {
+      "description": "Flask environment",
+      "value": "production"
     }
   },
   "formation": {
     "web": {
       "quantity": 1,
-      "size": "free"
+      "size": "basic"
     }
   },
   "addons": [],
-  "scripts": {},
+  "scripts": {
+    "postdeploy": "echo 'Deployment completed successfully'"
+  },
   "environments": {
     "test": {},
     "staging": {},

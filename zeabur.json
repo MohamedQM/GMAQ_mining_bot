@@ -1,0 +1,18 @@
+
+{
+  "name": "crypto-mining-platform",
+  "type": "python",
+  "framework": "flask",
+  "buildCommand": "pip install -r requirements.txt",
+  "startCommand": "gunicorn --bind 0.0.0.0:$PORT --workers 1 --timeout 120 main:app",
+  "env": {
+    "PYTHONPATH": ".",
+    "FLASK_ENV": "production"
+  },
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
+  ]
+}
